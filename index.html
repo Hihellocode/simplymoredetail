@@ -1214,7 +1214,7 @@ footer {
           </div>
           <div class="contact-info-block">
             <div class="contact-info-label">Email</div>
-            <div class="contact-info-val"><a href="mailto:simplymoredetail@gmail.com">simplymoredetail@gmail.com</a></div>
+            <div class="contact-info-val"><a href="/cdn-cgi/l/email-protection#3a4953574a56435755485f5e5f4e5b53567a5d575b535614595557"><span class="__cf_email__" data-cfemail="03706a6e736f7a6e6c7166676677626a6f43646e626a6f2d606c6e">[email&#160;protected]</span></a></div>
           </div>
           <div class="contact-info-block">
             <div class="contact-info-label">Garage Location</div>
@@ -1244,30 +1244,30 @@ footer {
         <!-- RIGHT: FORM -->
         <div class="form-wrap">
           <div class="form-title">Request a <em>Free Quote</em></div>
-          <div id="formArea">
+          <form id="formArea" action="https://formspree.io/f/mreykovp" method="POST" onsubmit="handleSubmit(event)">
             <div class="form-row">
               <div class="form-group">
                 <label>First Name</label>
-                <input type="text" id="fname" placeholder="John">
+                <input type="text" name="First Name" placeholder="John" required>
               </div>
               <div class="form-group">
                 <label>Last Name</label>
-                <input type="text" id="lname" placeholder="Smith">
+                <input type="text" name="Last Name" placeholder="Smith">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label>Phone Number</label>
-                <input type="tel" id="phone" placeholder="(954) 000-0000">
+                <input type="tel" name="Phone" placeholder="(954) 000-0000" required>
               </div>
               <div class="form-group">
                 <label>Email</label>
-                <input type="email" id="email" placeholder="you@email.com">
+                <input type="email" name="email" placeholder="you@email.com">
               </div>
             </div>
             <div class="form-group">
               <label>Service Interested In</label>
-              <select id="service">
+              <select name="Service" required>
                 <option value="">— Select a Service —</option>
                 <option>Ceramic Coating — Level 1 (EXOv5)</option>
                 <option>Ceramic Coating — Level 2 (Crystal Serum Light)</option>
@@ -1282,11 +1282,11 @@ footer {
             <div class="form-row">
               <div class="form-group">
                 <label>Vehicle Year & Make</label>
-                <input type="text" id="vehicle" placeholder="e.g. 2022 BMW M3">
+                <input type="text" name="Vehicle" placeholder="e.g. 2022 BMW M3">
               </div>
               <div class="form-group">
                 <label>Vehicle Type</label>
-                <select id="vtype">
+                <select name="Vehicle Type">
                   <option value="">— Select —</option>
                   <option>Coupe</option>
                   <option>Sedan</option>
@@ -1297,11 +1297,11 @@ footer {
             </div>
             <div class="form-group">
               <label>Additional Notes</label>
-              <textarea id="notes" placeholder="Any details about your car's condition, specific concerns, or preferred appointment time..."></textarea>
+              <textarea name="Notes" placeholder="Any details about your car's condition, specific concerns, or preferred appointment time..."></textarea>
             </div>
-            <button class="form-submit" onclick="submitForm()">Send Request →</button>
+            <button type="submit" class="form-submit">Send Request →</button>
             <p class="form-note">We'll contact you within a few hours. Your info is never sold or shared.</p>
-          </div>
+          </form>
           <div class="form-success" id="formSuccess">
             ✦ Thank you! We'll be in touch shortly.
           </div>
@@ -1346,7 +1346,7 @@ footer {
         <div class="footer-col-title">Contact</div>
         <ul>
           <li><a href="tel:9547591360">(954) 759-1360</a></li>
-          <li><a href="mailto:simplymoredetail@gmail.com">simplymoredetail@gmail.com</a></li>
+          <li><a href="/cdn-cgi/l/email-protection#bbc8d2d6cbd7c2d6d4c9dedfdecfdad2d7fbdcd6dad2d795d8d4d6"><span class="__cf_email__" data-cfemail="56253f3b263a2f3b392433323322373f3a16313b373f3a7835393b">[email&#160;protected]</span></a></li>
           <li><a href="#">19229 SW 54th St<br>Miramar, FL 33029</a></li>
         </ul>
       </div>
@@ -1361,7 +1361,7 @@ footer {
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 function showPage(id) {
   // Hide all pages
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1380,17 +1380,26 @@ function toggleMenu() {
   document.getElementById('mobileMenu').classList.toggle('open');
 }
 
-function submitForm() {
-  const fname = document.getElementById('fname').value;
-  const phone = document.getElementById('phone').value;
-  const service = document.getElementById('service').value;
-  if (!fname || !phone || !service) {
-    alert('Please fill in your name, phone number, and select a service.');
-    return;
+async function handleSubmit(event) {
+  event.preventDefault();
+  const form = document.getElementById('formArea');
+  const data = new FormData(form);
+  try {
+    const response = await fetch('https://formspree.io/f/mreykovp', {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+    if (response.ok) {
+      form.style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    } else {
+      alert('There was an issue. Please call us at (954) 759-1360.');
+    }
+  } catch (error) {
+    alert('There was an issue. Please call us at (954) 759-1360.');
   }
-  document.getElementById('formArea').style.display = 'none';
-  document.getElementById('formSuccess').style.display = 'block';
 }
-</script>
-</body>
-</html>
+
+function submitForm() {
+  const fname = document.getElementById('fname') && document.getElementById('fname').val
