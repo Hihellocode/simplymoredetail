@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simply More Detail - Get a Quote</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --coral: #FF6B6B;
+            --coral-dark: #E85555;
+            --black: #1a1a1a;
+            --gray: #f5f5f5;
+            --text-dark: #2d2d2d;
+            --text-light: #666;
+            --border: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--gray);
+            color: var(--text-dark);
+        }
+
+        /* Chat Button */
+        #chat-btn-smd {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(255, 107, 107, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: pulse-smd 3s infinite;
+        }
+
+        @keyframes pulse-smd {
+            0%, 100% {
+                box-shadow: 0 8px 30px rgba(255, 107, 107, 0.4), 0 0 0 0 rgba(255, 107, 107, 0.5);
+            }
+            50% {
+                box-shadow: 0 8px 30px rgba(255, 107, 107, 0.4), 0 0 0 15px rgba(255, 107, 107, 0);
+            }
+        }
+
+        #chat-btn-smd:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 40px rgba(255, 107, 107, 0.5);
+        }
+
+        #chat-btn-smd svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        /* Chat Container */
+        #chat-container-smd {
+            position: fixed;
+            bottom: 120px;
+            right: 28px;
+            width: 400px;
+            max-width: calc(100vw - 56px);
+            height: 650px;
+            max-height: calc(100vh - 160px);
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(26, 26, 26, 0.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 99998;
+            animation: slideUp-smd 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp-smd {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        #chat-container-smd.active {
+            display: flex;
+        }
+
+        /* Header */
+        .chat-header-smd {
+            background: linear-gradient(135deg, var(--black) 0%, #2d2d2d 100%);
+            color: white;
+            padding: 28px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-header-smd::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 107, 107, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-tagline {
+            font-size: 14px;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .close-btn-smd {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 2;
+        }
+
+        .close-btn-smd:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        /* Messages */
+        .chat-messages-smd {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: #fafafa;
+        }
+
+        .message-smd {
+            display: flex;
+            gap: 12px;
+            animation: fadeSlide-smd 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeSlide-smd {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-smd.bot .avatar-smd {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.25);
+        }
+
+        .message-smd.bot .avatar-smd svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
+        }
+
+        .message-content-smd {
+            background: white;
+            padding: 16px 18px;
+            border-radius: 18px;
+            max-width: 75%;
+            font-size: 15px;
+            line-height: 1.6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .message-smd.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-smd.user .message-content-smd {
+            background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+            color: white;
+            margin-left: auto;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.25);
+        }
+
+        /* Options */
+        .options-smd {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .option-btn-smd {
+            background: white;
+            border: 2px solid var(--border);
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            font-family: inherit;
+            color: var(--text-dark);
+        }
+
+        .option-btn-smd:hover {
+            border-color: var(--coral);
+            background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        .option-btn-smd.full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Input */
+        .chat-input-smd {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border);
+            display: none;
+            gap: 12px;
+            background: white;
+        }
+
+        .chat-input-smd.active {
+            display: flex;
+        }
+
+        .chat-input-smd input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .chat-input-smd input:focus {
+            border-color: var(--coral);
+            background: #fff;
+        }
+
+        .chat-input-smd button {
+            background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dark) 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        .chat-input-smd button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Typing */
+        .typing-smd {
+            display: flex;
+            gap: 5px;
+            padding: 14px;
+        }
+
+        .typing-smd span {
+            width: 9px;
+            height: 9px;
+            background: var(--coral);
+            border-radius: 50%;
+            animation: typing-smd 1.4s infinite;
+        }
+
+        .typing-smd span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-smd span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing-smd {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.6;
+            }
+            30% {
+                transform: translateY(-12px);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #chat-container-smd {
+                width: calc(100vw - 32px);
+                right: 16px;
+                bottom: 105px;
+            }
+            
+            #chat-btn-smd {
+                right: 16px;
+                bottom: 16px;
+                width: 65px;
+                height: 65px;
+            }
+
+            .options-smd {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Chat Button -->
+    <button id="chat-btn-smd" aria-label="Get a quote">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+        </svg>
+    </button>
+
+    <!-- Chat Container -->
+    <div id="chat-container-smd">
+        <div class="chat-header-smd">
+            <button class="close-btn-smd" id="close-smd" aria-label="Close">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="white">
+                    <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"/>
+                </svg>
+            </button>
+            <div class="header-content">
+                <div class="brand-name">Simply More Detail</div>
+                <div class="brand-tagline">Premium Mobile Detailing</div>
+            </div>
+        </div>
+
+        <div class="chat-messages-smd" id="messages-smd"></div>
+
+        <div class="chat-input-smd" id="input-smd">
+            <input type="text" id="user-input-smd" placeholder="Enter your phone number..." />
+            <button id="send-btn-smd">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // State
+        const state = {
+            step: 'initial',
+            data: {}
+        };
+
+        // Elements
+        const chatBtn = document.getElementById('chat-btn-smd');
+        const chatContainer = document.getElementById('chat-container-smd');
+        const closeBtn = document.getElementById('close-smd');
+        const messagesDiv = document.getElementById('messages-smd');
+        const userInput = document.getElementById('user-input-smd');
+        const sendBtn = document.getElementById('send-btn-smd');
+        const inputArea = document.getElementById('input-smd');
+
+        // Toggle
+        chatBtn.addEventListener('click', () => {
+            chatContainer.classList.add('active');
+            if (state.step === 'initial') {
+                setTimeout(startConversation, 400);
+            }
+        });
+
+        closeBtn.addEventListener('click', () => {
+            chatContainer.classList.remove('active');
+        });
+
+        // Send
+        sendBtn.addEventListener('click', handleUserMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleUserMessage();
+        });
+
+        // Add Message
+        function addMessage(text, isBot = true, options = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message-smd ${isBot ? 'bot' : 'user'}`;
+            
+            if (isBot) {
+                messageDiv.innerHTML = `
+                    <div class="avatar-smd">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <div class="message-content-smd">${text}</div>
+                `;
+            } else {
+                messageDiv.innerHTML = `<div class="message-content-smd">${text}</div>`;
+            }
+
+            messagesDiv.appendChild(messageDiv);
+            
+            if (options) {
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'options-smd';
+                options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn-smd' + (opt.fullWidth ? ' full-width' : '');
+                    btn.textContent = opt.text;
+                    btn.onclick = () => opt.action();
+                    optionsDiv.appendChild(btn);
+                });
+                messageDiv.querySelector('.message-content-smd').appendChild(optionsDiv);
+            }
+
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showTyping() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message-smd bot';
+            typingDiv.id = 'typing-smd';
+            typingDiv.innerHTML = `
+                <div class="avatar-smd">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
+                <div class="message-content-smd">
+                    <div class="typing-smd">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+            messagesDiv.appendChild(typingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typing-smd');
+            if (typing) typing.remove();
+        }
+
+        // Conversation Flow
+        function startConversation() {
+            state.step = 'service';
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addMessage("Hey! 👋 Let's get you a quote. What service are you interested in?");
+                setTimeout(askService, 600);
+            }, 800);
+        }
+
+        function askService() {
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addMessage("Pick one:", true, [
+                    { text: "Wash & Wax", action: () => selectService("Wash & Wax") },
+                    { text: "Full Detail", action: () => selectService("Full Detail") },
+                    { text: "Ceramic Coating", action: () => selectService("Ceramic Coating") },
+                    { text: "Not Sure", action: () => selectService("Not Sure"), fullWidth: true }
+                ]);
+            }, 500);
+        }
+
+        function selectService(service) {
+            state.data.service = service;
+            addMessage(service, false);
+            state.step = 'location';
+            setTimeout(askLocation, 700);
+        }
+
+        function askLocation() {
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addMessage("Perfect! Where are you located?");
+                setTimeout(() => {
+                    showTyping();
+                    setTimeout(() => {
+                        hideTyping();
+                        addMessage("We service:", true, [
+                            { text: "Broward County", action: () => selectLocation("Broward") },
+                            { text: "Miami-Dade", action: () => selectLocation("Miami") },
+                            { text: "West Palm Beach", action: () => selectLocation("WPB") },
+                            { text: "Outside These Areas", action: () => selectLocation("Outside"), fullWidth: true }
+                        ]);
+                    }, 400);
+                }, 600);
+            }, 500);
+        }
+
+        function selectLocation(location) {
+            const locationText = {
+                "Broward": "Broward County",
+                "Miami": "Miami-Dade",
+                "WPB": "West Palm Beach",
+                "Outside": "Outside service area"
+            };
+            
+            state.data.location = location;
+            addMessage(locationText[location], false);
+            
+            if (location === "Outside") {
+                setTimeout(() => {
+                    showTyping();
+                    setTimeout(() => {
+                        hideTyping();
+                        addMessage("We don't service that area yet, but we're expanding! Leave your number and we'll reach out when we do.");
+                        setTimeout(askPhone, 600);
+                    }, 600);
+                }, 700);
+            } else {
+                state.step = 'phone';
+                setTimeout(askPhone, 700);
+            }
+        }
+
+        function askPhone() {
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addMessage("Great! I'll text you a quick form to get vehicle details and give you an instant quote. What's your phone number?");
+                inputArea.classList.add('active');
+                userInput.focus();
+            }, 500);
+        }
+
+        function handleUserMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            if (state.step === 'phone') {
+                const phoneRegex = /(\d{3}[-.\s]?\d{3}[-.\s]?\d{4}|\d{10})/;
+                if (phoneRegex.test(message)) {
+                    addMessage(message, false);
+                    state.data.phone = message;
+                    userInput.value = '';
+                    inputArea.classList.remove('active');
+                    sendFormLink();
+                } else {
+                    showTyping();
+                    setTimeout(() => {
+                        hideTyping();
+                        addMessage("Please enter a valid phone number (e.g., 954-759-1360)");
+                    }, 400);
+                }
+            }
+        }
+
+        function sendFormLink() {
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                addMessage("Perfect! 🚗 I just texted you the quote form. Fill it out (takes 2 min) and we'll send you pricing same day!");
+                
+                // Log data for backend integration
+                console.log('Lead data:', state.data);
+                
+                // Testing link
+                setTimeout(() => {
+                    const formUrl = `detailing-quote-form.html?phone=${encodeURIComponent(state.data.phone)}&service=${encodeURIComponent(state.data.service)}&location=${encodeURIComponent(state.data.location)}`;
+                    addMessage(`<a href="${formUrl}" target="_blank" style="color: var(--coral); text-decoration: underline; font-weight: 600;">Click here to view the form</a> (for testing)`, true);
+                }, 1000);
+            }, 800);
+        }
+    </script>
+</body>
+</html>
