@@ -407,7 +407,7 @@
     function startConversation() {
         state.step = 'service';
         setTimeout(() => {
-            addMessage("Hey! 👋 Ready to book your TESTINGTESTING? What service do you need?");
+            addMessage("Hey! 👋 Ready to book your detail? What service do you need?");
             setTimeout(askService, 600);
         }, 800);
     }
