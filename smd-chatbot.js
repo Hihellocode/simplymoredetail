@@ -547,7 +547,7 @@
             if (response.ok) {
                 setTimeout(() => {
                     // Generate booking form URL with pre-filled data
-                    const formUrl = `${window.location.origin}/detailing-booking-form.html?name=${encodeURIComponent(state.data.name)}&phone=${encodeURIComponent(state.data.phone)}&service=${encodeURIComponent(state.data.service)}`;
+const formUrl = `https://simplymoredetailing.com/detailing-booking-form.html?name=${encodeURIComponent(state.data.name)}&phone=${encodeURIComponent(state.data.phone)}&service=${encodeURIComponent(state.data.service)}`;
                     
                     addMessage(`Perfect, ${state.data.name}! 🚗 <a href="${formUrl}" target="_blank" style="color: #FF6B6B; text-decoration: underline; font-weight: 600;">Click here to complete your booking form</a> (takes 2 min). We'll text you at ${state.data.phone} to confirm your slot!`);
                     sendBtn.disabled = false;
