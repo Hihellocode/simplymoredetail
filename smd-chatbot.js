@@ -1,4 +1,4 @@
-// Simply More Detail - AI Quote Chatbot
+// Simply More Detail - AI Booking Bot
 // Add this to your index.html: <script src="smd-chatbot.js"></script>
 
 (function() {
@@ -39,8 +39,8 @@
         }
         
         #smd-chat-btn svg {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             fill: white;
         }
         
@@ -108,11 +108,14 @@
         }
         
         .smd-tag {
-            font-size: 14px;
-            opacity: 0.8;
-            font-weight: 400;
+            font-size: 16px;
+            opacity: 1;
+            font-weight: 600;
             position: relative;
             z-index: 1;
+            color: #FF6B6B;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .smd-close {
@@ -308,9 +311,9 @@
 
     // Inject HTML
     const chatHTML = `
-        <button id="smd-chat-btn" aria-label="Get a quote">
+        <button id="smd-chat-btn" aria-label="Book now">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
             </svg>
         </button>
 
@@ -318,7 +321,7 @@
             <div class="smd-header">
                 <button class="smd-close" id="smd-close">×</button>
                 <div class="smd-brand">Simply More Detail</div>
-                <div class="smd-tag">Premium Mobile Detailing</div>
+                <div class="smd-tag">Book Now in 1 Minute</div>
             </div>
             <div class="smd-messages" id="smd-msgs"></div>
             <div class="smd-input-area" id="smd-input">
@@ -398,7 +401,7 @@
     function startConversation() {
         state.step = 'service';
         setTimeout(() => {
-            addMessage("Hey! 👋 Let's get you a quote. What service are you interested in?");
+            addMessage("Hey! 👋 Ready to book your detail? What service do you need?");
             setTimeout(askService, 600);
         }, 800);
     }
@@ -408,7 +411,7 @@
             { text: "Wash & Wax", action: () => selectService("Wash & Wax") },
             { text: "Full Detail", action: () => selectService("Full Detail") },
             { text: "Ceramic Coating", action: () => selectService("Ceramic Coating") },
-            { text: "Not Sure", action: () => selectService("Not Sure"), fullWidth: true }
+            { text: "Not Sure Yet", action: () => selectService("Not Sure"), fullWidth: true }
         ]);
     }
 
@@ -421,7 +424,7 @@
 
     function askLocation() {
         setTimeout(() => {
-            addMessage("Perfect! Where are you located?");
+            addMessage("Perfect! Where's your vehicle located?");
             setTimeout(() => {
                 addMessage("We service:", true, [
                     { text: "Broward County", action: () => selectLocation("Broward") },
@@ -446,7 +449,7 @@
         
         if (location === "Outside") {
             setTimeout(() => {
-                addMessage("We don't service that area yet, but we're expanding! Leave your number and we'll reach out when we do.");
+                addMessage("We don't service that area yet, but we're expanding soon! Leave your number and we'll let you know when we launch there.");
                 setTimeout(askPhone, 600);
             }, 700);
         } else {
@@ -457,7 +460,7 @@
 
     function askPhone() {
         setTimeout(() => {
-            addMessage("Great! I'll text you a quick form to get vehicle details and give you an instant quote. What's your phone number?");
+            addMessage("Awesome! I'll text you a quick booking form (takes 1 min). What's your phone number?");
             inputArea.classList.add('active');
             userInput.focus();
         }, 500);
@@ -483,14 +486,14 @@
 
     function sendFormLink() {
         setTimeout(() => {
-            addMessage("Perfect! 🚗 I just texted you the quote form. Fill it out (takes 2 min) and we'll send you pricing same day!");
+            addMessage("Perfect! 🚗 Just texted you the booking link. Fill it out and we'll confirm your time slot within 2 hours!");
             
-            console.log('Lead data:', state.data);
+            console.log('Booking lead:', state.data);
             
             // Testing link
             setTimeout(() => {
                 const formUrl = `detailing-quote-form.html?phone=${encodeURIComponent(state.data.phone)}&service=${encodeURIComponent(state.data.service)}&location=${encodeURIComponent(state.data.location)}`;
-                addMessage(`<a href="${formUrl}" target="_blank" style="color: #FF6B6B; text-decoration: underline; font-weight: 600;">Click here to view the form</a> (for testing)`, true);
+                addMessage(`<a href="${formUrl}" target="_blank" style="color: #FF6B6B; text-decoration: underline; font-weight: 600;">Click here to open booking form</a> (for testing)`, true);
             }, 1000);
         }, 800);
     }
